@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>サロン商品カタログ | Quay hair</title>
+  <style>
+    :root {
+      --beige:   #f5f0e8;
+      --brown:   #8b6f5e;
+      --dark:    #3d2b1f;
+      --accent:  #c4956a;
+      --green:   #06c755;
+      --text:    #4a3728;
+      --muted:   #9e8070;
+      --radius:  14px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Hiragino Sans','Noto Sans JP',sans-serif; background:var(--beige); color:var(--text); }
+
+    /* HEADER */
+    .header { background:var(--dark); color:#fff; text-align:center; padding:26px 20px 20px; position:sticky; top:0; z-index:10; }
+    .header .sub { font-size:11px; letter-spacing:4px; color:var(--accent); margin-bottom:4px; }
+    .header h1 { font-size:20px; font-weight:700; letter-spacing:2px; }
+    .header p { font-size:11px; color:rgba(255,255,255,.5); margin-top:4px; }
+
+    /* TABS */
+    .tab-bar { display:flex; overflow-x:auto; gap:8px; padding:14px 14px 0; scrollbar-width:none; }
+    .tab-bar::-webkit-scrollbar { display:none; }
+    .tab { flex-shrink:0; padding:7px 16px; border-radius:999px; border:1.5px solid var(--brown); background:transparent; color:var(--brown); font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; transition:all .2s; }
+    .tab.active,.tab:hover { background:var(--brown); color:#fff; }
+
+    /* BRAND SECTION */
+    .brand-section { margin:18px 14px 0; display:none; }
+    .brand-section.visible { display:block; }
+    .brand-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .brand-label { font-size:10px; font-weight:700; letter-spacing:2px; color:var(--muted); text-transform:uppercase; }
+    .brand-link { font-size:11px; color:var(--accent); text-decoration:none; }
+
+    /* PRODUCT GRID */
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+    /* CARD */
+    .card { background:#fff; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(61,43,31,.08); display:flex; flex-direction:column; }
+    .card-img { aspect-ratio:1; background:var(--beige); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+    .card-img img { width:100%; height:100%; object-fit:contain; padding:10px; }
+    .badge { position:absolute; top:7px; right:7px; background:var(--accent); color:#fff; font-size:9px; font-weight:700; padding:2px 7px; border-radius:999px; z-index:1; }
+    .card-body { padding:10px; flex:1; display:flex; flex-direction:column; }
+    .card-body .brand-tag { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:2px; }
+    .card-body h3 { font-size:13px; font-weight:700; line-height:1.3; color:var(--dark); margin-bottom:4px; }
+    .card-body .desc { font-size:11px; color:var(--muted); line-height:1.5; flex:1; margin-bottom:8px; }
+    .card-body .variant { font-size:10px; color:var(--accent); font-weight:700; margin-bottom:4px; }
+    .card-body .price { font-size:14px; font-weight:800; color:var(--accent); }
+    .card-body .price span { font-size:10px; font-weight:400; color:var(--muted); }
+    .card-body .price.unknown { font-size:11px; color:var(--muted); font-weight:400; }
+    .btn { display:flex; align-items:center; justify-content:center; gap:5px; margin:8px 10px 10px; padding:9px; background:var(--green); color:#fff; border:none; border-radius:9px; font-size:12px; font-weight:700; text-decoration:none; cursor:pointer; }
+    .btn svg { width:14px; height:14px; fill:#fff; flex-shrink:0; }
+
+    /* WIDE CARD */
+    .card.wide { grid-column:1/-1; flex-direction:row; align-items:stretch; }
+    .card.wide .card-img { width:120px; min-width:120px; aspect-ratio:auto; }
+    .card.wide .card-body { padding:12px; }
+    .card.wide .btn { margin:6px 12px 12px; }
+
+    /* INFO CARD */
+    .info-card { background:#fff; border-radius:var(--radius); padding:16px; box-shadow:0 2px 10px rgba(61,43,31,.08); grid-column:1/-1; display:flex; align-items:center; gap:14px; }
+    .info-card .icon { font-size:36px; }
+    .info-card .body { flex:1; }
+    .info-card h3 { font-size:14px; font-weight:700; color:var(--dark); margin-bottom:4px; }
+    .info-card p { font-size:11px; color:var(--muted); line-height:1.5; }
+    .info-card .btn { margin:8px 0 0; width:100%; }
+
+    .spacer { height:20px; }
+
+    /* HOW TO ORDER */
+    .how-to { margin:20px 14px 14px; background:#fff; border-radius:var(--radius); padding:18px; box-shadow:0 2px 10px rgba(61,43,31,.08); }
+    .how-to h2 { font-size:13px; font-weight:700; color:var(--dark); margin-bottom:12px; }
+    .step { display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; }
+    .step-num { width:24px; height:24px; min-width:24px; background:var(--accent); color:#fff; border-radius:50%; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+    .step-text { font-size:12px; line-height:1.5; padding-top:3px; }
+
+    /* LINE BANNER */
+    .line-banner { margin:0 14px 20px; background:var(--green); border-radius:var(--radius); padding:14px 18px; display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff; box-shadow:0 4px 14px rgba(6,199,85,.22); }
+    .line-banner svg { width:32px; height:32px; fill:#fff; flex-shrink:0; }
+    .line-banner .lbl { font-size:10px; opacity:.8; }
+    .line-banner .cta { font-size:14px; font-weight:800; }
+    .line-banner .arrow { font-size:18px; opacity:.7; }
+
+    /* FOOTER */
+    .footer { background:var(--dark); color:rgba(255,255,255,.45); text-align:center; font-size:11px; padding:18px; }
+    .footer a { color:var(--accent); text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <p class="sub">Quay hair</p>
+  <h1>サロン商品カタログ</h1>
+  <p>美容師おすすめのヘアケア・ビューティーアイテム</p>
+</header>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="showTab('all',this)">すべて</button>
+  <button class="tab" onclick="showTab('styling',this)">スタイリング</button>
+  <button class="tab" onclick="showTab('haircare',this)">ヘアケア</button>
+  <button class="tab" onclick="showTab('fragrance',this)">フレグランス</button>
+  <button class="tab" onclick="showTab('beauty',this)">コスメ・美容液</button>
+</div>
+
+<!-- ===================== N. STYLING SERIES ===================== -->
+<div class="brand-section visible" id="sec-n-styling" data-cat="styling">
+  <div class="brand-header">
+    <span class="brand-label">① N. STYLING SERIES / ナプラ</span>
+    <a class="brand-link" href="https://www.napla.co.jp/products/item/?cat=styling" target="_blank">全49商品 ›</a>
+  </div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.napla.co.jp/wp/wp-content/uploads/2025/10/oil_CJ.jpg" alt="N. ポリッシュオイル" />
+        <span class="badge">人気</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">N. / Napla</p>
+        <h3>N. ポリッシュオイル</h3>
+        <p class="desc">天然由来成分のみ。ヘア・ボディ・ハンド対応のマルチユースオイル</p>
+        <p class="variant">4香り展開</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('N. ポリッシュオイル（ナプラ）');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで相談・注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.napla.co.jp/wp/wp-content/uploads/2025/05/%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%82%A3%E3%83%95%E3%82%A3%E3%82%B0-1.jpg" alt="NOTE by N. スタイリングオイル" />
+        <span class="badge">NEW</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">NOTE by N. / Napla</p>
+        <h3>NOTE by N. スタイリングオイル</h3>
+        <p class="desc">光・風・水をイメージした3つの香り。潤いと香りを纏うヘアオイル</p>
+        <p class="variant">クラッシィフィグ / シアーブルーム / ホワイトムスク</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('NOTE by N. スタイリングオイル（ナプラ）');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで相談・注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.napla.co.jp/wp/wp-content/uploads/2025/10/Balm_CJ.jpg" alt="N. ナチュラルバーム" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">N. / Napla</p>
+        <h3>N. ナチュラルバーム</h3>
+        <p class="desc">天然由来素材のみのマルチユースバーム。髪・肌・リップに使える</p>
+        <p class="variant">4香り展開</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('N. ナチュラルバーム（ナプラ）');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで相談・注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.napla.co.jp/wp/wp-content/uploads/2025/10/Serum.jpg" alt="N. スタイリングセラム" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">N. / Napla</p>
+        <h3>N. スタイリングセラム</h3>
+        <p class="desc">なめらかなミルクタイプ。まとまりとツヤを与えるスタイリングクリーム</p>
+        <p class="variant">2種展開</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('N. スタイリングセラム（ナプラ）');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで相談・注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.napla.co.jp/wp/wp-content/uploads/2023/08/7-3.png" alt="N. ヘアスプレー" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">N. / Napla</p>
+        <h3>N. ヘアスプレー</h3>
+        <p class="desc">ベース / パウダリー / ニュアンス / ホールドの4タイプ。スタイルに合わせて選べる</p>
+        <p class="variant">4種展開（No.1〜5）</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('N. ヘアスプレー（ナプラ）');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで相談・注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.napla.co.jp/wp/wp-content/uploads/2023/08/N.-オム-シアクリーム-1-1.png" alt="N. オムシリーズ" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">N. オム / Napla</p>
+        <h3>N. オム シリーズ</h3>
+        <p class="desc">メンズ向けスタイリング。ワックス・クリーム・グリース・ジェルバーム・スプレーの5種</p>
+        <p class="variant">5アイテム展開</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('N. オムシリーズ（ナプラ）');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで相談・注文
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== ARIMINO DANCE ===================== -->
+<div class="brand-section visible" id="sec-arimino" data-cat="styling">
+  <div class="brand-header">
+    <span class="brand-label">⑤ ARIMINO Dance Design Tuner</span>
+    <a class="brand-link" href="https://www.arimino.co.jp/products/dance/" target="_blank">公式サイト ›</a>
+  </div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.arimino.co.jp/corporate/wp-content/uploads/2024/03/LOCKINMOVE_Wbox.jpg" alt="ロッキンムーブ" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Arimino / スタイリング</p>
+        <h3>ロッキンムーブ</h3>
+        <p class="desc">ハードワックス。しっかりホールドしながらも束感を自在に</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('ARIMINO Dance ロッキンムーブ');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.arimino.co.jp/corporate/wp-content/uploads/2024/03/HOUSEAIRY_WBOX.jpg" alt="ハウスエアリー" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Arimino / スタイリング</p>
+        <h3>ハウスエアリー</h3>
+        <p class="desc">クレイワックス。ふんわりエアリーなボリュームスタイルに</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('ARIMINO Dance ハウスエアリー');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.arimino.co.jp/corporate/wp-content/uploads/2024/03/BREAKKEEP_WBOX.jpg" alt="ブレイクキープ" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Arimino / スタイリング</p>
+        <h3>ブレイクキープ</h3>
+        <p class="desc">ワックスジェル。ウェットな質感とホールド力を両立</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('ARIMINO Dance ブレイクキープ');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.arimino.co.jp/corporate/wp-content/uploads/2024/03/MODERNSHIMMER_wBOX.jpg" alt="モダンシマー" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Arimino / スタイリング</p>
+        <h3>モダンシマー</h3>
+        <p class="desc">トリートメントオイルジェリー。ツヤと潤いを与えながらスタイリング</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('ARIMINO Dance モダンシマー');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.arimino.co.jp/corporate/wp-content/uploads/2024/03/POPINFIG.jpg" alt="ポッピンフィグ" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Arimino / スタイリング</p>
+        <h3>ポッピンフィグ</h3>
+        <p class="desc">バームミルク。軽やかな仕上がりとまとまりを両立するナチュラルスタイルに</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('ARIMINO Dance ポッピンフィグ');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.arimino.co.jp/corporate/wp-content/uploads/2024/03/BALLETMELLOW1_WBOX.jpg" alt="バレエメロウ" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Arimino / アウトバス</p>
+        <h3>バレエメロウ</h3>
+        <p class="desc">洗い流さないミルク。しっとりやわらかな髪に仕上げるアウトバストリートメント</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('ARIMINO Dance バレエメロウ');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.arimino.co.jp/corporate/wp-content/uploads/2024/03/HULAPRIMER_WBOX.jpg" alt="フラプライマー" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Arimino / アウトバス</p>
+        <h3>フラプライマー</h3>
+        <p class="desc">洗い流さないオイル。ドライヤー前に使うアウトバスオイルトリートメント</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('ARIMINO Dance フラプライマー');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== MIINCURL ===================== -->
+<div class="brand-section visible" id="sec-miincurl" data-cat="styling">
+  <div class="brand-header">
+    <span class="brand-label">⑦ ミルボン MIINCURL アイロンキープ</span>
+    <a class="brand-link" href="https://salon.milbon.co.jp/shop/g/g115305/" target="_blank">公式サイト ›</a>
+  </div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://salon.milbon.co.jp/img/goods/9/miincurl_primer01.jpg" alt="アイロンキープ プライマー01" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Milbon / ヒートプロテクト</p>
+        <h3>アイロンキープ プライマー01</h3>
+        <p class="desc">軽いオイルブレンドで超薄膜を形成。ふんわり弾むような仕上がりに導くヒートプロテクト</p>
+        <p class="price">¥3,080 <span>（税込）40mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('ミルボン ミインカール アイロンキープ プライマー01');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://salon.milbon.co.jp/img/goods/9/miincurl_primer02.jpg" alt="アイロンキープ プライマー02" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Milbon / ヒートプロテクト</p>
+        <h3>アイロンキープ プライマー02</h3>
+        <p class="desc">リッチなオイルブレンドで密な膜を形成。しっとりやわらかく落ち着いた仕上がりに</p>
+        <p class="price">¥3,080 <span>（税込）40mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('ミルボン ミインカール アイロンキープ プライマー02');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== HITA ===================== -->
+<div class="brand-section visible" id="sec-hita" data-cat="haircare">
+  <div class="brand-header">
+    <span class="brand-label">⑥ LeBeL HITA</span>
+    <a class="brand-link" href="https://www.lebel.co.jp/products/item/49472/" target="_blank">公式サイト ›</a>
+  </div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.lebel.co.jp/cms/wp-content/uploads/2022/01/hc_hita_shampoo.png" alt="HITAシャンプー" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LeBeL / シャンプー</p>
+        <h3>HITA シャンプー</h3>
+        <p class="desc">広がる・ザラつくクセ毛を根元からしなやかにする潤い濃密泡の美髪ケアシャンプー</p>
+        <p class="price">¥3,520 <span>（税込）400mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LeBeL HITA HITA シャンプー');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.lebel.co.jp/cms/wp-content/uploads/2022/01/hc_hita_treatment.png" alt="HITAトリートメント" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LeBeL / トリートメント</p>
+        <h3>HITA トリートメント</h3>
+        <p class="desc">シャンプーとセットで使うクセ毛・広がり対策トリートメント</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LeBeL HITA HITA トリートメント');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.lebel.co.jp/cms/wp-content/uploads/2022/01/hc_hita_oil.png" alt="HITAオイル" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LeBeL / ヘアオイル</p>
+        <h3>HITA オイル</h3>
+        <p class="desc">しなやかさとまとまりを与える洗い流さないヘアオイル</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LeBeL HITA HITA オイル');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.lebel.co.jp/cms/wp-content/uploads/2026/02/hc_hita_smilk-2.png" alt="HITAセラムミルク" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LeBeL / アウトバス</p>
+        <h3>HITA セラムミルク</h3>
+        <p class="desc">クセ毛・広がりをしなやかに整えるセラム配合のアウトバスミルク</p>
+        <p class="price unknown">価格はLINEでご確認を</p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LeBeL HITA HITA セラムミルク');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== FLOWDIA ===================== -->
+<div class="brand-section visible" id="sec-flowdia" data-cat="haircare">
+  <div class="brand-header">
+    <span class="brand-label">④ DEMI FLOWDIA</span>
+    <a class="brand-link" href="https://flowdia.jp/flowdia.html" target="_blank">公式サイト ›</a>
+  </div>
+  <div class="grid">
+    <div class="info-card">
+      <div class="icon">🌊</div>
+      <div class="body">
+        <h3>DEMI FLOWDIA シリーズ</h3>
+        <p>ダメージケア・エイジングケア・スカルプケアの3ライン展開。お悩みに合わせたヘアケアラインです。どのラインが合うかはLINEでご相談ください。</p>
+        <a class="btn" href="#" onclick="orderLine('DEMI FLOWDIA シリーズ');return false;">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+          LINEでラインを相談する
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SEE SAW ===================== -->
+<div class="brand-section visible" id="sec-seesaw" data-cat="haircare">
+  <div class="brand-header">
+    <span class="brand-label">③ SEE SAW Haircare</span>
+    <a class="brand-link" href="https://www.seesaw-hair.com/line-up/" target="_blank">公式サイト ›</a>
+  </div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.seesaw-hair.com/wp-content/themes/seesaw2025/hair-care/images/shampoo.png" alt="シャンプーB" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SEE SAW / シャンプー</p>
+        <h3>ヘア&スキャルプ シャンプーB</h3>
+        <p class="desc">クリーミーな泡が髪の摩擦を防ぎ、髪と地肌をやさしく洗い上げる。バランス仕上がり</p>
+        <p class="price">¥3,850 <span>（税込）250mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SEE SAW ヘア&スキャルプ シャンプーB');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.seesaw-hair.com/wp-content/themes/seesaw2025/hair-care/images/hair_treatment.png" alt="トリートメントB" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SEE SAW / トリートメント</p>
+        <h3>ヘアトリートメントB</h3>
+        <p class="desc">すうっとなじむテクスチャーで毛先までやわらかく、みずみずしい艶髪に整える</p>
+        <p class="price">¥3,850 <span>（税込）200mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SEE SAW ヘアトリートメントB');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.seesaw-hair.com/wp-content/themes/seesaw2025/hair-care/images/shampoo.png" alt="シャンプーS" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SEE SAW / シャンプー</p>
+        <h3>ヘア&スキャルプ シャンプーS</h3>
+        <p class="desc">根元はふんわり、毛先までなめらかでしなやかな質感に。スムース仕上がり</p>
+        <p class="price">¥3,850 <span>（税込）250mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SEE SAW ヘア&スキャルプ シャンプーS');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.seesaw-hair.com/wp-content/themes/seesaw2025/hair-care/images/hair_treatment.png" alt="トリートメントS" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SEE SAW / トリートメント</p>
+        <h3>ヘアトリートメントS</h3>
+        <p class="desc">シャンプーSとセットで使用。なめらかでしなやかな仕上がりをサポート</p>
+        <p class="price">¥3,850 <span>（税込）200mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SEE SAW ヘアトリートメントS');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.seesaw-hair.com/wp-content/themes/seesaw2025/hair-care/images/shampoo.png" alt="シャンプーT" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SEE SAW / シャンプー</p>
+        <h3>ヘア&スキャルプ シャンプーT</h3>
+        <p class="desc">根元からしっかりおさまり、毛先までなめらかに。タイト仕上がり</p>
+        <p class="price">¥3,850 <span>（税込）250mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SEE SAW ヘア&スキャルプ シャンプーT');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.seesaw-hair.com/wp-content/themes/seesaw2025/hair-care/images/hair_treatment.png" alt="トリートメントT" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SEE SAW / トリートメント</p>
+        <h3>ヘアトリートメントT</h3>
+        <p class="desc">シャンプーTとセットで使用。根元からしっかりおさまるタイト仕上がりに</p>
+        <p class="price">¥3,850 <span>（税込）200mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SEE SAW ヘアトリートメントT');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.seesaw-hair.com/wp-content/themes/seesaw2025/hair-care/images/clear_oil.png" alt="クリアオイルシャープ" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SEE SAW / アウトバス</p>
+        <h3>クリアオイル シャープ</h3>
+        <p class="desc">動きの美しいスタイルに。やわらかく立体感を魅せるクリアな艶</p>
+        <p class="price">¥4,180 <span>（税込）80mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SEE SAW クリアオイル シャープ');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://www.seesaw-hair.com/wp-content/themes/seesaw2025/hair-care/images/clear_oil.png" alt="クリアオイルフラット" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SEE SAW / アウトバス</p>
+        <h3>クリアオイル フラット</h3>
+        <p class="desc">まとまりの美しいスタイルに。やわらかく面を整えて魅せるクリアな艶</p>
+        <p class="price">¥4,180 <span>（税込）80mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SEE SAW クリアオイル フラット');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card wide">
+      <div class="card-img">
+        <img src="https://www.seesaw-hair.com/wp-content/themes/seesaw2025/hair-care/images/clear_milk.png" alt="クリアミルクナチュラル" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SEE SAW / アウトバス</p>
+        <h3>クリアミルク ナチュラル</h3>
+        <p class="desc">みずみずしく美しいスタイルに。ハイトーンスタイルもやわらかく整えるナチュラルな艶</p>
+        <p class="price">¥4,180 <span>（税込）80mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SEE SAW クリアミルク ナチュラル');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LOA THE OIL ===================== -->
+<div class="brand-section visible" id="sec-loa" data-cat="fragrance">
+  <div class="brand-header">
+    <span class="brand-label">② LOA THE OIL / JADE</span>
+    <a class="brand-link" href="https://jade-japan.com/loa/ja/oil/" target="_blank">公式サイト ›</a>
+  </div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://jade-japan.com/loa/ja/assets/images/oil/img_product_photo7.jpg" alt="NOIR" />
+        <span class="badge">NOIR</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LOA / フレグランスオイル</p>
+        <h3>NOIR</h3>
+        <p class="desc">ベルガモット・ベイリーフ・ローズ・ムスクが織りなす気品あふれる奥深い香り</p>
+        <p class="price">¥5,500 <span>（税込）100mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LOA THE OIL NOIR');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://jade-japan.com/loa/ja/assets/images/oil/img_product_photo8.jpg" alt="BLEU CLAIR" />
+        <span class="badge">BLEU CLAIR</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LOA / フレグランスオイル</p>
+        <h3>BLEU CLAIR</h3>
+        <p class="desc">心まで澄み渡るアクアの爽やかさとスズラン・ローズのフローラルハーモニー</p>
+        <p class="price">¥5,500 <span>（税込）100mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LOA THE OIL BLEU CLAIR');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://jade-japan.com/loa/ja/assets/images/oil/img_product_photo9.jpg" alt="PEAR BLANCHE" />
+        <span class="badge">PEAR BLANCHE</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LOA / フレグランスオイル</p>
+        <h3>PEAR BLANCHE</h3>
+        <p class="desc">みずみずしいペアーにローズ・スズランが優雅に咲き誇るフルーティーフローラル</p>
+        <p class="price">¥5,500 <span>（税込）100mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LOA THE OIL PEAR BLANCHE');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://jade-japan.com/loa/ja/assets/images/oil/img_product_photo1.jpg" alt="BLANCHE" />
+        <span class="badge">BLANCHE</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LOA / フレグランスオイル</p>
+        <h3>BLANCHE</h3>
+        <p class="desc">自然の純粋さとエレガンスが融合した洗練されたホワイトフローラルの香り</p>
+        <p class="price">¥5,500 <span>（税込）100mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LOA THE OIL BLANCHE');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://jade-japan.com/loa/ja/assets/images/oil/img_product_photo2.jpg" alt="Citrus Vert" />
+        <span class="badge">Citrus Vert</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LOA / フレグランスオイル</p>
+        <h3>Citrus Vert</h3>
+        <p class="desc">爽やかなシトラスオーラにウッディノートが加わった軽快で洗練された香り</p>
+        <p class="price">¥5,500 <span>（税込）100mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LOA THE OIL Citrus Vert');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://jade-japan.com/loa/ja/assets/images/oil/img_product_photo3.jpg" alt="JASMIN doré" />
+        <span class="badge">JASMIN doré</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LOA / フレグランスオイル</p>
+        <h3>JASMIN doré</h3>
+        <p class="desc">ジャスミンが魅惑的に漂い、神秘的な魅力を引き出す官能的なフローラル</p>
+        <p class="price">¥5,500 <span>（税込）100mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LOA THE OIL JASMIN doré');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://jade-japan.com/loa/ja/assets/images/oil/img_product_photo4.jpg" alt="LATTE ROSE" />
+        <span class="badge">LATTE ROSE</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LOA / フレグランスオイル</p>
+        <h3>LATTE ROSE</h3>
+        <p class="desc">華麗で品のあるセンティフォリアローズを中心に、ホワイトフローラルの甘みが調和</p>
+        <p class="price">¥5,500 <span>（税込）100mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LOA THE OIL LATTE ROSE');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://jade-japan.com/loa/ja/assets/images/oil/img_product_photo5.jpg" alt="Neroli Smoke tea" />
+        <span class="badge">Neroli Smoke tea</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LOA / フレグランスオイル</p>
+        <h3>Neroli Smoke tea</h3>
+        <p class="desc">ネロリの華やかさとシトラスの煌めき、スモーキーノートが絶妙に絡み合う</p>
+        <p class="price">¥5,500 <span>（税込）100mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LOA THE OIL Neroli Smoke tea');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://jade-japan.com/loa/ja/assets/images/oil/img_product_photo6.jpg" alt="MYSTIQUE WOOD" />
+        <span class="badge">MYSTIQUE WOOD</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">LOA / フレグランスオイル</p>
+        <h3>MYSTIQUE WOOD</h3>
+        <p class="desc">深い森に足を踏み入れた瞬間の感覚を呼び起こす深みあるウッディフレグランス</p>
+        <p class="price">¥5,500 <span>（税込）100mL</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('LOA THE OIL MYSTIQUE WOOD');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="info-card" style="background:#faf7f2; border:1.5px dashed var(--accent);">
+      <div class="icon">💡</div>
+      <div class="body">
+        <h3 style="font-size:12px;">30mLサイズもあります</h3>
+        <p>お試し用30mL（¥3,520 税込）もご用意しています。香りでお悩みの方はLINEでご相談ください。</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== SPICARE HARI ===================== -->
+<div class="brand-section visible" id="sec-spicare" data-cat="beauty">
+  <div class="brand-header">
+    <span class="brand-label">⑧ SPICARE HARI V3ファンデーション</span>
+    <a class="brand-link" href="https://spicare-hari.com/intelligent_foundation/" target="_blank">公式サイト ›</a>
+  </div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://spicare-hari.com/intelligent_foundation/assets/img/product_item01.png" alt="V3 インテリジェント" />
+        <span class="badge">年齢肌向け</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SPICARE / ファンデーション</p>
+        <h3>V3 インテリジェント ファンデーション</h3>
+        <p class="desc">年齢肌・混合肌向け。セミマットなベルベット肌を実現。SPF50+/PA++++</p>
+        <p class="price">¥9,900 <span>（税込）15g</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SPICARE HARI V3 インテリジェント ファンデーション');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://spicare-hari.com/intelligent_foundation/assets/img/product_item02.png" alt="V3 エキサイティング" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SPICARE / ファンデーション</p>
+        <h3>V3 エキサイティング ファンデーション</h3>
+        <p class="desc">乾燥肌・混合肌向け。ツヤうるグロウ肌を実現。SPF37/PA++</p>
+        <p class="price">¥8,800 <span>（税込）15g</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SPICARE HARI V3 エキサイティング ファンデーション');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://spicare-hari.com/intelligent_foundation/assets/img/product_item03.png" alt="V3 シャイニング" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SPICARE / ファンデーション</p>
+        <h3>V3 シャイニング ファンデーション</h3>
+        <p class="desc">乾燥肌・普通肌向け。透明感あふれるシフォン肌を叶える。SPF37/PA++</p>
+        <p class="price">¥9,350 <span>（税込）15g</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SPICARE HARI V3 シャイニング ファンデーション');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://spicare-hari.com/intelligent_foundation/assets/img/product_item04.png" alt="V3 ブリリアント" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">SPICARE / ファンデーション</p>
+        <h3>V3 ブリリアント ファンデーション</h3>
+        <p class="desc">年齢肌・混合肌向け。ハリ感輝くシルク肌を実現。SPF40/PA++</p>
+        <p class="price">¥9,350 <span>（税込）15g</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('SPICARE HARI V3 ブリリアント ファンデーション');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LASH ADDICT ===================== -->
+<div class="brand-section visible" id="sec-lash" data-cat="beauty">
+  <div class="brand-header">
+    <span class="brand-label">⑨ Lash addict / So Addicted</span>
+    <a class="brand-link" href="https://soaddicted.jp/item/" target="_blank">公式サイト ›</a>
+  </div>
+  <div class="grid">
+
+    <div class="card wide">
+      <div class="card-img">
+        <img src="https://soaddicted.jp/wp-content/uploads/2022/02/eyelash.png" alt="アイラッシュ セラム アドバンス" />
+        <span class="badge">人気No.1</span>
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Lash addict / まつ毛美容液</p>
+        <h3>アイラッシュ コンディショニング セラム アドバンス</h3>
+        <p class="desc">まつ毛の根元にまっすぐアプローチ！まつ毛のハリ・コシをサポートする人気No.1美容液</p>
+        <p class="price">¥11,000 <span>（税込）</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('Lash addict アイラッシュ コンディショニング セラム アドバンス');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://soaddicted.jp/wp-content/uploads/2022/02/transcara.jpg" alt="ラッシュ トランスカラ" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Lash addict / まつ毛</p>
+        <h3>ラッシュ トランスカラ</h3>
+        <p class="desc">日中用まつ毛トリートメント。日中もまつ毛をケアしながら保護</p>
+        <p class="price">¥7,150 <span>（税込）</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('Lash addict ラッシュ トランスカラ');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://soaddicted.jp/wp-content/uploads/2022/02/drama-maskara1.png" alt="メジャー ドラマ マスカラ" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Lash addict / マスカラ</p>
+        <h3>メジャー ドラマ マスカラ</h3>
+        <p class="desc">ボリューム感あるドラマティックな目元に仕上げるマスカラ</p>
+        <p class="price">¥4,400 <span>（税込）</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('Lash addict メジャー ドラマ マスカラ');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://soaddicted.jp/wp-content/uploads/2022/02/liner1.png" alt="ラシャス ラッシュ ライナー" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Lash addict / アイライナー</p>
+        <h3>ラシャス ラッシュ ライナー</h3>
+        <p class="desc">まぶたに優しくなじみ、際立つ目元に仕上げるアイライナー</p>
+        <p class="price">¥4,400 <span>（税込）</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('Lash addict ラシャス ラッシュ ライナー');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://soaddicted.jp/wp-content/uploads/2022/02/eyebrow.jpg" alt="ブロウアディクト" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Lash addict / 眉毛美容液</p>
+        <h3>ブロウアディクト アイブロウ セラム</h3>
+        <p class="desc">デザインを楽しめる眉毛へ。まゆ毛用コンディショニング美容液</p>
+        <p class="price">¥11,000 <span>（税込）</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('Lash addict ブロウアディクト アイブロウ コンディショニング セラム アドバンス');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://soaddicted.jp/wp-content/uploads/2022/02/SeriesLipaddict-Type201-No01.png" alt="リップアディクト" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Lash addict / リップ美容液</p>
+        <h3>リップアディクト</h3>
+        <p class="desc">ふっくら艶やかな唇を演出する美容液リップ。全13色展開</p>
+        <p class="price">¥11,000 <span>（税込）</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('Lash addict リップアディクト');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+    <div class="card wide">
+      <div class="card-img">
+        <img src="https://soaddicted.jp/wp-content/uploads/2022/02/SeriesHairaddict-Type%E3%83%98%E3%82%A2%E3%82%A2%E3%83%87%E3%82%A3%E3%82%AF%E3%83%88-%E3%82%BB%E3%83%A9%E3%83%A0-No01.png" alt="ヘアアディクト セラム" />
+      </div>
+      <div class="card-body">
+        <p class="brand-tag">Lash addict / 頭皮美容液</p>
+        <h3>ヘアアディクト セラム</h3>
+        <p class="desc">1日1回で大人の髪悩みにアプローチ！頭皮用美容液でサロンクオリティのヘアケアを</p>
+        <p class="price">¥19,800 <span>（税込）</span></p>
+      </div>
+      <a class="btn" href="#" onclick="orderLine('Lash addict ヘアアディクト セラム');return false;">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+        LINEで注文
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<div class="spacer"></div>
+
+<!-- HOW TO ORDER -->
+<div class="how-to">
+  <h2>🛒 ご注文・お問い合わせ方法</h2>
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-text">気になる商品の <strong>「LINEで注文」</strong> ボタンをタップ</div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-text">商品名入りのメッセージが自動入力されるので、そのまま <strong>送信</strong></div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-text">サロンから <strong>価格・在庫・お受け取り方法</strong> をご案内します</div>
+  </div>
+</div>
+
+<!-- LINE BANNER -->
+<a class="line-banner" href="https://line.me/R/ti/p/@860uvbmd">
+  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 3.3 1.87 6.19 4.7 7.87V22l3.37-1.86c.62.17 1.27.26 1.93.26 5.52 0 10-4.04 10-9s-4.48-9-10-9z"/></svg>
+  <div>
+    <p class="lbl">何でもお気軽にご相談ください</p>
+    <p class="cta">Quay hair 公式LINEはこちら</p>
+  </div>
+  <span class="arrow">›</span>
+</a>
+
+<footer class="footer">
+  <p>© 2026 Quay hair All rights reserved.</p>
+  <p style="margin-top:5px"><a href="https://line.me/R/ti/p/@860uvbmd">@860uvbmd</a></p>
+</footer>
+
+<script>
+  const LINE_ID = '@860uvbmd';
+
+  function orderLine(productName) {
+    const msg = `【${productName}】が気になります！詳しく教えてください😊`;
+    window.open(`https://line.me/R/oaMessage/${LINE_ID}/?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  function showTab(cat, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.brand-section').forEach(s => {
+      s.classList.toggle('visible', cat === 'all' || s.dataset.cat === cat);
+    });
+  }
+</script>
+</body>
+</html>
