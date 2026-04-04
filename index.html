@@ -1049,8 +1049,8 @@
   const LINE_ID = '@860uvbmd';
 
   function orderLine(productName) {
-    const msg = `【${productName}】が気になります！詳しく教えてください😊`;
-    window.open(`https://line.me/R/oaMessage/${LINE_ID}/?text=${encodeURIComponent(msg)}`, '_blank');
+    const msg = `${productName}の注文・相談がしたい`;
+    location.href = `https://line.me/R/oaMessage/${LINE_ID}?text=${encodeURIComponent(msg)}`;
   }
 
   function showTab(cat, el) {
