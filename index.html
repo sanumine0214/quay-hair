@@ -1048,28 +1048,10 @@
 
 <script>
   const LINE_ID = '@860uvbmd';
-  const LINE_URL = 'https://line.me/R/ti/p/' + LINE_ID;
 
   function orderLine(productName) {
     var msg = productName + 'の注文・相談がしたい';
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(msg).then(function() {
-        showToast('💬 メッセージをコピーしました！LINEが開いたら貼り付けてください');
-        setTimeout(function(){ location.href = LINE_URL; }, 1200);
-      }).catch(function() {
-        location.href = LINE_URL;
-      });
-    } else {
-      location.href = LINE_URL;
-    }
-  }
-
-  function showToast(msg) {
-    var t = document.createElement('div');
-    t.textContent = msg;
-    t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;z-index:9999;text-align:center;line-height:1.6;max-width:80vw;';
-    document.body.appendChild(t);
-    setTimeout(function(){ t.remove(); }, 3000);
+    location.href = 'https://line.me/R/oaMessage/' + LINE_ID + '/?text=' + encodeURIComponent(msg);
   }
 
   function showTab(cat, el) {
