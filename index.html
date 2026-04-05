@@ -1050,7 +1050,7 @@
 
   function orderLine(productName) {
     const msg = `${productName}の注文・相談がしたい`;
-    window.open(`https://line.me/R/oaMessage/${LINE_ID}/?text=${encodeURIComponent(msg)}`, '_blank');
+    location.href = `https://line.me/R/oaMessage/${LINE_ID}?text=${encodeURIComponent(msg)}`;
   }
 
   function showTab(cat, el) {
